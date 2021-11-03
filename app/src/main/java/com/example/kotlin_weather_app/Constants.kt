@@ -13,9 +13,25 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.ContextCompat.startActivity
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 
 object Constants {
+
+    val BASE_URL="https://community-open-weather-map.p.rapidapi.com/"
+
+
+    fun getApi():WeatherApi{
+        val retrofit=Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val api:WeatherApi=retrofit.create(WeatherApi::class.java)
+        return api
+    }
+
+
 
     fun isNetworkAvailable(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

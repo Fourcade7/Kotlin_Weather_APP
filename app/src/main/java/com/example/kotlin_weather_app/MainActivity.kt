@@ -8,7 +8,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-
+import com.example.kotlin_weather_app.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 
 import android.provider.Settings
@@ -27,6 +27,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.common.api.ApiException
 import android.app.Activity
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Address
 import android.location.Location
 import android.util.Log
@@ -35,41 +36,65 @@ import com.google.android.gms.location.*
 import androidx.annotation.NonNull
 import com.google.android.gms.tasks.OnSuccessListener
 import android.location.Geocoder
+import android.view.View
+import android.view.WindowManager
+import com.example.kotlin_weather_app.Response.WeatherResponse
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 
 
 //for permission
 lateinit var locationRequest: LocationRequest
   val REQUEST_CHECK_SETTINGS = 10001;
-
 //for current location
  lateinit var fusedLocationClient: FusedLocationProviderClient
+ var lat:Double=0.0
+ var lon:Double=0.0
 
-
-
-
-
-
-
-class MainActivity : AppCompatActivity() {
+ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+//        window.statusBarColor= Color.WHITE
+//        window.decorView.systemUiVisibility= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+
+        check()
+       floatingactionbutton.setOnClickListener {
+           check()
+       }
 
 
-
-        button1.setOnClickListener {
-        lastlocation()
-
-        }
-
-        button2.setOnClickListener {
-
-        }
 
     }
+
+
+     fun check(){
+         if (Constants.isNetworkAvailable(this@MainActivity) && Constants.isLocationAvailable(this@MainActivity)){
+             Toast.makeText(this@MainActivity, "Internet and Location Yes", Toast.LENGTH_LONG).show()
+
+             lastlocation()
+
+         }
+         if (Constants.isNetworkAvailable(this@MainActivity)){
+             Toast.makeText(this@MainActivity, "Internet Yes", Toast.LENGTH_LONG).show()
+
+         }else{
+             Toast.makeText(this@MainActivity, "Internet Nope", Toast.LENGTH_LONG).show()
+
+         }
+         if (Constants.isLocationAvailable(this@MainActivity)){
+             Toast.makeText(this@MainActivity, "Location Yes", Toast.LENGTH_LONG).show()
+
+         }else{
+             Toast.makeText(this@MainActivity, "Location Nope", Toast.LENGTH_LONG).show()
+             turnGPSOn()
+
+         }
+     }
 
 
     fun lastlocation(){
@@ -88,8 +113,11 @@ class MainActivity : AppCompatActivity() {
         }
             fusedLocationClient.lastLocation.addOnSuccessListener {
                 if (it!=null){
+                    lat=it.latitude
+                    lon=it.longitude
+                    gorequest()
                     Toast.makeText(this@MainActivity,"${it.latitude}  ${it.longitude}", Toast.LENGTH_SHORT).show()
-                   
+
                     Log.d("Pr","${it.latitude}  ${it.longitude}")
                 }
             }
@@ -119,9 +147,9 @@ class MainActivity : AppCompatActivity() {
             .explainReasonBeforeRequest()
             .request { allGranted, grantedList, deniedList ->
                 if (allGranted) {
-                    Toast.makeText(this, "All permissions are granted", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity, "All permissions are granted", Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(this, "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@MainActivity, "These permissions are denied: $deniedList", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -174,22 +202,54 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode === REQUEST_CHECK_SETTINGS) {
-            when (resultCode) {
-                RESULT_OK -> {
-                    Toast.makeText(this, "GPS is tured on", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(this, "GPS required to be tured on", Toast.LENGTH_SHORT).show()
-                }
-                RESULT_CANCELED -> Toast.makeText(
-                    this,
-                    "GPS required to be tured on",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
+
+     fun gorequest(){
+         val cal:Call<WeatherResponse>?=Constants.getApi().getWeather(lat, lon)
+         cal?.enqueue(object :Callback<WeatherResponse>{
+
+             override fun onResponse(
+                 call: Call<WeatherResponse>,
+                 response: Response<WeatherResponse>
+             ) {
+                 if (response.isSuccessful){
+
+                        Toast.makeText(this@MainActivity, "Krasava", Toast.LENGTH_SHORT).show()
+                        val weatherResponse=response.body()
+
+                     if (weatherResponse?.main?.temp!!>0){
+                         textview1.setText("+${weatherResponse?.main?.temp!! -273.00}°C")
+                     }else{
+                         textview1.setText("-${weatherResponse?.main?.temp!! -273.00}°C")
+                     }
+
+                        textview2.setText(weatherResponse?.weather!!.get(0).description)
+                        textview3.setText("${weatherResponse?.sys?.country} ${weatherResponse?.name}" )
+
+                 }
+             }
+
+             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {
+                 Toast.makeText(this@MainActivity, "try again", Toast.LENGTH_SHORT).show()
+             }
+         })
+     }
+
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//        if (requestCode === REQUEST_CHECK_SETTINGS) {
+//            when (resultCode) {
+//                RESULT_OK -> {
+//                    Toast.makeText(this, "GPS is tured on", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(this, "GPS required to be tured on", Toast.LENGTH_SHORT).show()
+//                }
+//                RESULT_CANCELED -> Toast.makeText(
+//                    this,
+//                    "GPS required to be tured on",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//            }
+//        }
+//    }
 
 
 
