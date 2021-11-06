@@ -36,12 +36,16 @@ import com.google.android.gms.location.*
 import androidx.annotation.NonNull
 import com.google.android.gms.tasks.OnSuccessListener
 import android.location.Geocoder
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import com.example.kotlin_weather_app.Response.WeatherResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
 
 
@@ -69,6 +73,8 @@ lateinit var locationRequest: LocationRequest
 
 
 
+
+
     }
 
 
@@ -83,14 +89,14 @@ lateinit var locationRequest: LocationRequest
              Toast.makeText(this@MainActivity, "Internet Yes", Toast.LENGTH_LONG).show()
 
          }else{
-             Toast.makeText(this@MainActivity, "Internet Nope", Toast.LENGTH_LONG).show()
+             Toast.makeText(this@MainActivity, "Internet No", Toast.LENGTH_LONG).show()
 
          }
          if (Constants.isLocationAvailable(this@MainActivity)){
              Toast.makeText(this@MainActivity, "Location Yes", Toast.LENGTH_LONG).show()
 
          }else{
-             Toast.makeText(this@MainActivity, "Location Nope", Toast.LENGTH_LONG).show()
+             Toast.makeText(this@MainActivity, "Location No", Toast.LENGTH_LONG).show()
              turnGPSOn()
 
          }
@@ -189,6 +195,8 @@ lateinit var locationRequest: LocationRequest
                             )
                         } catch (ex: SendIntentException) {
                             ex.printStackTrace()
+                            Toast.makeText(this@MainActivity, "GPS is already tured 1", Toast.LENGTH_SHORT)
+
                         }
                         LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
 
@@ -213,17 +221,50 @@ lateinit var locationRequest: LocationRequest
              ) {
                  if (response.isSuccessful){
 
-                        Toast.makeText(this@MainActivity, "Krasava", Toast.LENGTH_SHORT).show()
                         val weatherResponse=response.body()
+                     var temp=weatherResponse?.main?.temp
+                     val decimalformat=DecimalFormat("#.##")
+                    // decimalformat.roundingMode=RoundingMode.CEILING
+                    decimalformat.format(temp)
 
-                     if (weatherResponse?.main?.temp!!>0){
-                         textview1.setText("+${weatherResponse?.main?.temp!! -273.00}°C")
+
+                     if (weatherResponse?.main?.temp!!-273.0>0){
+                         textview1.setText("+${temp!!-273.00}°C")
                      }else{
-                         textview1.setText("-${weatherResponse?.main?.temp!! -273.00}°C")
+                         textview1.setText("${temp!! -273.00}°C")
                      }
+                         val calendar=Calendar.getInstance()
+                        var hour=calendar.get(Calendar.HOUR_OF_DAY)
+                        var minute=calendar.get(Calendar.MINUTE)
 
-                        textview2.setText(weatherResponse?.weather!!.get(0).description)
-                        textview3.setText("${weatherResponse?.sys?.country} ${weatherResponse?.name}" )
+                        textview2.setText(weatherResponse?.weather!!.get(0).main)
+                        textview3.setText("${weatherResponse?.sys?.country} ${weatherResponse?.name}")
+                        textview4.text="${weatherResponse?.wind?.speed!!} m/s"
+                     textview5.text="Weather ${weatherResponse?.weather!!.get(0).description}"
+                     when(weatherResponse?.weather!!.get(0).description){
+
+                         "clear sky"-> {
+
+                             if(hour>18 || hour<7) {
+                                 lottieanimationview4.setAnimation("moon.json")
+                                 lottieanimationview4.playAnimation()
+
+                                 lottieanimationview1.setAnimation("moon.json")
+                                 lottieanimationview1.playAnimation()
+
+                             }else{
+                                 lottieanimationview4.setAnimation("sun.json")
+                                 lottieanimationview4.playAnimation()
+                                 lottieanimationview1.setAnimation("sun.json")
+                                 lottieanimationview1.playAnimation()
+
+                             }
+                         }
+                         "rain"->lottieanimationview4.setAnimation("storm.json")
+                         "snow"->lottieanimationview4.setAnimation("snow.json")
+                         "mist"->lottieanimationview4.setAnimation("mist.json")
+
+                     }
 
                  }
              }
@@ -234,22 +275,23 @@ lateinit var locationRequest: LocationRequest
          })
      }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode === REQUEST_CHECK_SETTINGS) {
-//            when (resultCode) {
-//                RESULT_OK -> {
-//                    Toast.makeText(this, "GPS is tured on", Toast.LENGTH_SHORT).show()
-//                    Toast.makeText(this, "GPS required to be tured on", Toast.LENGTH_SHORT).show()
-//                }
-//                RESULT_CANCELED -> Toast.makeText(
-//                    this,
-//                    "GPS required to be tured on",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
-//        }
-//    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode === REQUEST_CHECK_SETTINGS) {
+            when (resultCode) {
+                RESULT_OK -> {
+                    Toast.makeText(this, "GPS is tured on", Toast.LENGTH_SHORT).show()
+
+                    Toast.makeText(this, "GPS required to be tured on", Toast.LENGTH_SHORT).show()
+                }
+                RESULT_CANCELED -> Toast.makeText(
+                    this,
+                    "GPS required to be tured on",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 
 
 

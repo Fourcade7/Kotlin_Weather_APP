@@ -20,17 +20,32 @@
            android:src="@drawable/kuz"></ImageView>
 
        <TextView
-           android:maxLength="5"
            android:id="@+id/textview1"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_alignParentBottom="true"
+           android:layout_marginTop="25dp"
+
+           android:layout_marginBottom="25dp"
+
+           android:layout_toLeftOf="@+id/textviewc"
+           android:maxLength="3"
+           android:text="0"
+           android:textColor="@color/white"
+           android:textSize="75dp"></TextView>
+
+
+       <TextView
+           android:id="@+id/textviewc"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            android:layout_alignParentEnd="true"
            android:layout_alignParentBottom="true"
-           android:layout_marginStart="25dp"
            android:layout_marginTop="25dp"
-           android:layout_marginEnd="25dp"
            android:layout_marginBottom="25dp"
-           android:text="10°C"
+           android:maxLength="5"
+           android:layout_marginEnd="25dp"
+           android:text="°C"
            android:textColor="@color/white"
            android:textSize="75dp"></TextView>
 
@@ -38,116 +53,149 @@
 
     <LinearLayout
         android:id="@+id/linearlay1"
-        android:layout_marginTop="280dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_marginTop="280dp"
         android:background="@drawable/background"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-                android:clickable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 app:cardCornerRadius="15dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true"
-                >
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <com.airbnb.lottie.LottieAnimationView
-                        android:padding="10dp"
+                        android:id="@+id/lottieanimationview1"
                         android:layout_width="match_parent"
                         android:layout_height="70dp"
-                        app:lottie_loop="true"
+                        android:padding="10dp"
                         app:lottie_autoPlay="true"
-                        app:lottie_rawRes="@raw/rainturnfine"></com.airbnb.lottie.LottieAnimationView>
+                        app:lottie_loop="true"
+                        app:lottie_fileName="sun.json"></com.airbnb.lottie.LottieAnimationView>
+
                     <TextView
                         android:id="@+id/textview2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Current Weather"
                         android:layout_margin="10dp"
-                        ></TextView>
+                        android:text="Current Weather"></TextView>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
-                android:clickable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 app:cardCornerRadius="15dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true"
-                >
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <com.airbnb.lottie.LottieAnimationView
-                        android:padding="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="70dp"
-                        app:lottie_loop="true"
+                        android:padding="10dp"
                         app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
                         app:lottie_rawRes="@raw/gps"></com.airbnb.lottie.LottieAnimationView>
+
                     <TextView
 
                         android:id="@+id/textview3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Current Weather"
                         android:layout_margin="10dp"
-                        ></TextView>
+                        android:text="Current Weather"></TextView>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+
             <androidx.cardview.widget.CardView
-                android:clickable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 app:cardCornerRadius="15dp"
-                app:cardElevation="5dp"
-                app:cardUseCompatPadding="true"
-                >
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <com.airbnb.lottie.LottieAnimationView
-                        android:padding="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="70dp"
-                        app:lottie_loop="true"
+                        android:padding="10dp"
                         app:lottie_autoPlay="true"
-                        app:lottie_rawRes="@raw/weatherstormshowersday"></com.airbnb.lottie.LottieAnimationView>
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/wind"></com.airbnb.lottie.LottieAnimationView>
+
                     <TextView
 
                         android:id="@+id/textview4"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Weather"
                         android:layout_margin="10dp"
-                        ></TextView>
+                        android:text="Wind"></TextView>
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
 
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/lottieanimationview4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/textview5"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="satellitearoundearth.json"
+                app:lottie_loop="true"
+
+                >
+
+            </com.airbnb.lottie.LottieAnimationView>
+            <TextView
+                android:layout_marginBottom="25dp"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:id="@+id/textview5"
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="The Sun "
+                ></TextView>
+
+        </RelativeLayout>
 
     </LinearLayout>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
