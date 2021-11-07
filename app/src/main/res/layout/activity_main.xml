@@ -87,7 +87,7 @@
                         android:padding="10dp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
-                        app:lottie_fileName="sun.json"></com.airbnb.lottie.LottieAnimationView>
+                        ></com.airbnb.lottie.LottieAnimationView>
 
                     <TextView
                         android:id="@+id/textview2"
