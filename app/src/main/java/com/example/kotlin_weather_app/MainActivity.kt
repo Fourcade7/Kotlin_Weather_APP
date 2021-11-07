@@ -72,6 +72,17 @@ lateinit var locationRequest: LocationRequest
        }
 
 
+        val calendar=Calendar.getInstance()
+        var month=calendar.get(Calendar.MONTH)+1
+        when(month){
+            12,1,2->{imageview1.setImageResource(R.drawable.qish)}
+            3,4,5->{imageview1.setImageResource(R.drawable.bahor)}
+            6,7,8->{imageview1.setImageResource(R.drawable.yoz)}
+            9,10,11->{imageview1.setImageResource(R.drawable.kuz)}
+
+
+
+        }
 
 
 
@@ -80,23 +91,19 @@ lateinit var locationRequest: LocationRequest
 
      fun check(){
          if (Constants.isNetworkAvailable(this@MainActivity) && Constants.isLocationAvailable(this@MainActivity)){
-             Toast.makeText(this@MainActivity, "Internet and Location Yes", Toast.LENGTH_LONG).show()
+            // Toast.makeText(this@MainActivity, "Internet and Location Yes", Toast.LENGTH_LONG).show()
 
              lastlocation()
 
          }
          if (Constants.isNetworkAvailable(this@MainActivity)){
-             Toast.makeText(this@MainActivity, "Internet Yes", Toast.LENGTH_LONG).show()
 
          }else{
-             Toast.makeText(this@MainActivity, "Internet No", Toast.LENGTH_LONG).show()
 
          }
          if (Constants.isLocationAvailable(this@MainActivity)){
-             Toast.makeText(this@MainActivity, "Location Yes", Toast.LENGTH_LONG).show()
 
          }else{
-             Toast.makeText(this@MainActivity, "Location No", Toast.LENGTH_LONG).show()
              turnGPSOn()
 
          }
@@ -122,9 +129,9 @@ lateinit var locationRequest: LocationRequest
                     lat=it.latitude
                     lon=it.longitude
                     gorequest()
-                    Toast.makeText(this@MainActivity,"${it.latitude}  ${it.longitude}", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(this@MainActivity,"${it.latitude}  ${it.longitude}", Toast.LENGTH_SHORT).show()
 
-                    Log.d("Pr","${it.latitude}  ${it.longitude}")
+                   // Log.d("Pr","${it.latitude}  ${it.longitude}")
                 }
             }
     }

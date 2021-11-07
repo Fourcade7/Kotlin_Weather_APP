@@ -14,10 +14,11 @@
 
 
        <ImageView
+           android:id="@+id/imageview1"
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:scaleType="centerCrop"
-           android:src="@drawable/kuz"></ImageView>
+           ></ImageView>
 
        <TextView
            android:id="@+id/textview1"
@@ -184,16 +185,16 @@
                 >
 
             </com.airbnb.lottie.LottieAnimationView>
+
             <TextView
-                android:layout_marginBottom="25dp"
-                android:gravity="center"
-                android:layout_alignParentBottom="true"
                 android:id="@+id/textview5"
-                android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="The Sun "
-                ></TextView>
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="25dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Loading... "></TextView>
 
         </RelativeLayout>
 
