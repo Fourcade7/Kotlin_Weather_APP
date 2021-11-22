@@ -41,6 +41,10 @@ import android.os.Looper
 import android.view.View
 import android.view.WindowManager
 import com.example.kotlin_weather_app.Response.WeatherResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -270,6 +274,13 @@ lateinit var locationRequest: LocationRequest
                          "rain"->lottieanimationview4.setAnimation("storm.json")
                          "snow"->lottieanimationview4.setAnimation("snow.json")
                          "mist"->lottieanimationview4.setAnimation("mist.json")
+                         else->{
+                             lottieanimationview4.setAnimation("cloud.json")
+                             lottieanimationview4.playAnimation()
+                             lottieanimationview1.setAnimation("cloud.json")
+                             lottieanimationview1.playAnimation()
+
+                         }
 
                      }
 
@@ -288,6 +299,11 @@ lateinit var locationRequest: LocationRequest
             when (resultCode) {
                 RESULT_OK -> {
                     Toast.makeText(this, "GPS is tured on", Toast.LENGTH_SHORT).show()
+                    GlobalScope.launch(Dispatchers.Main) {
+                        delay(200)
+                        lastlocation()
+
+                    }
 
                     Toast.makeText(this, "GPS required to be tured on", Toast.LENGTH_SHORT).show()
                 }
